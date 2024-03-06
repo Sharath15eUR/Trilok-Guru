@@ -1,0 +1,43 @@
+#include <stdio.h>
+
+void multiplyMatrix(int *mat1, int *mat2, int *result, int n) {
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            *(result + i * n + j) = 0;
+            for (int k = 0; k < n; ++k) {
+                *(result + i * n + j) += (*(mat1 + i * n + k)) * (*(mat2 + k * n + j));
+            }
+        }
+    }
+}
+
+void displayMatrix(int *matrix, int n) {
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            printf("%d\t", *(matrix + i * n + j));
+        }
+        printf("\n");
+    }
+}
+int main() {
+    int n;
+    printf("Enter (n*n): ");
+    scanf("%d", &n);
+    int matrix1[n][n], matrix2[n][n], result[n][n];
+    printf("Enter the elements of the first matrix:\n");
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            scanf("%d", &matrix1[i][j]);
+        }
+    }
+    printf("Enter the elements of the second matrix:\n");
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            scanf("%d", &matrix2[i][j]);
+        }
+    }
+    multiplyMatrix(&matrix1[0][0], &matrix2[0][0], &result[0][0], n);
+    printf("Resultant Matrix:\n");
+    displayMatrix(&result[0][0], n);
+    return 0;
+}
