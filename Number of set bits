@@ -1,0 +1,19 @@
+#include <stdio.h>
+
+int question2(int num) {
+    int count = 0;
+    while (num) {
+        count += num & 1;
+        num >>= 1; 
+    }
+    return count;
+}
+
+int main() {
+    int num;
+    printf("Enter an integer: ");
+    scanf("%d", &num);
+    int result = question2(num);
+    printf("Number of set bits in %d: %d\n", num, result);
+    return 0;
+}
