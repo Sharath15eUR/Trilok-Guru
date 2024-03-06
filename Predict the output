@@ -1,0 +1,12 @@
+6. Find the output of the following // Consider the compiler is 32-bit machine 
+Size of InfoData = sizeof(int) + sizeof(char) + sizeof(char)
+                  = 4 bytes + 1 byte + 1 byte
+                  = 6 bytes
+
+7. Find the output of the following // Consider the compiler is 32-bit machine 
+Size of InfoData = 1 byte (A) + 8 bytes (B) + 1 byte (C)
+                 = 10 bytes
+
+8. Find the output of the following // Consider the compiler is 32-bit machine 
+The given code reverses a 32-bit unsigned integer.
+Output:78563412
