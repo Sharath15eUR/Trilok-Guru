@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+};
+
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void insertSorted(struct Node** head, int value) {
+    struct Node* newNode = createNode(value);
+
+    if (*head == NULL || value < (*head)->data) {
+        newNode->next = *head;
+        if (*head != NULL) (*head)->prev = newNode;
+        *head = newNode;
+    } else {
+        struct Node* current = *head;
+        while (current->next != NULL && current->next->data < value) {
+            current = current->next;
+        }
+        newNode->next = current->next;
+        newNode->prev = current;
+        if (current->next != NULL) current->next->prev = newNode;
+        current->next = newNode;
+    }
+}
+
+void printList(struct Node* head) {
+    while (head != NULL) {
+        printf("%d ", head->data);
+        head = head->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    struct Node* head = NULL;
+    insertSorted(&head, 5);
+    insertSorted(&head, 10);
+    insertSorted(&head, 7);
+    insertSorted(&head, 3);
+    printf("Doubly Linked List after inserting in sorted order: ");
+    printList(head);
+
+    while (head != NULL) {
+        struct Node* temp = head;
+        head = head->next;
+        free(temp);
+    }
+
+    return 0;
+}
