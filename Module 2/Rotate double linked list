@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    char data;
+    struct Node* prev;
+    struct Node* next;
+};
+struct Node* createNode(char value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+void insertEnd(struct Node** head, char value) {
+    struct Node* newNode = createNode(value);
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        struct Node* temp = *head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+        newNode->prev = temp;
+    }
+}
+void rotateByN(struct Node** head, int N) {
+    if (*head == NULL || N <= 0) {
+        return;
+    }
+    struct Node* current = *head;
+    int count = 1;
+    while (count < N && current != NULL) {
+        current = current->next;
+        count++;
+    }
+    if (current == NULL) {
+        return;
+    }
+    struct Node* newHead = current->next;
+    if (newHead != NULL) {
+        newHead->prev = NULL;
+    }
+    current->next = NULL;
+    current = newHead;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    current->next = *head;
+    if (*head != NULL) {
+        (*head)->prev = current;
+    }
+    *head = newHead;
+}
+void printList(struct Node* head) {
+    while (head != NULL) {
+        printf("%c ", head->data);
+        head = head->next;
+    }
+    printf("\n");
+}
+int main() {
+    struct Node* head = NULL;
+    int N;
+    printf("Enter the number of nodes: ");
+    scanf("%d", &N);
+
+    printf("Enter the characters for the doubly linked list:\n");
+    for (int i = 0; i < N; i++) {
+        char value;
+        scanf(" %c", &value); 
+        insertEnd(&head, value);
+    }
+    printf("Original Doubly Linked List: ");
+    printList(head);
+    printf("Enter the number of nodes to rotate by: ");
+    scanf("%d", &N);
+    rotateByN(&head, N);
+    printf("Doubly Linked List after rotating by %d nodes: ", N);
+    printList(head);
+    return 0;
+}
