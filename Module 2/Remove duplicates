@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    int data;
+    struct Node* next;
+};
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+    return newNode;
+}
+void removeDuplicates(struct Node* head) {
+    struct Node* current = head;
+    while (current != NULL && current->next != NULL) {
+        if (current->data == current->next->data) {
+            // Duplicate found, remove the duplicate node
+            struct Node* temp = current->next;
+            current->next = temp->next;
+            free(temp);
+        } else {
+            // Move to the next node
+            current = current->next;
+        }
+    }
+}
+void printList(struct Node* head) {
+    while (head != NULL) {
+        printf("%d ", head->data);
+        head = head->next;
+    }
+    printf("\n");
+}
+int main() {
+    struct Node* head = createNode(1);
+    head->next = createNode(1);
+    head->next->next = createNode(2);
+    head->next->next->next = createNode(3);
+    head->next->next->next->next = createNode(3);
+    printf("Original Linked List: ");
+    printList(head);
+    removeDuplicates(head);
+    printf("Linked List after removing duplicates: ");
+    printList(head);
+    return 0;
+}
