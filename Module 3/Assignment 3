@@ -1,0 +1,121 @@
+1. Which signals are triggered, when the following actions are performed.
+ 
+user press ctrl+C 
+-SIGINT(short interrupt) is triggered
+
+kill() system call is invoked  
+-SIGTERM or SIGKILL is triggered
+
+CPU tried to execute an illegal instruction
+-SIGILL is triggred
+
+When the program access the unassigned memory
+-SIGSEGV (segmentation fault)
+
+
+
+2.List the gdb command for the following operations  
+
+To run the current executable file
+-run or r
+
+To create breakpoints at
+-break or b
+
+To resume execution once after breakpoint
+- enable
+
+To clear break point created for a function
+-clear
+
+Print the parameters of the function in the backtrace
+-print or p
+
+
+
+3. Guess the output for the following program.
+
+2 2 2 2 2 2 2 
+
+
+4. Guess the output for the following program.
+3 4 2 4 1 4 1 4
+
+5. Code
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+void *worker_thread1(void *arg);
+void *worker_thread2(void *arg);
+int main() {
+  pthread_t worker1;
+  pthread_t worker2;
+  printf("\nBefore threads\n");
+  pthread_create(&worker1, NULL, worker_thread1, NULL);
+  pthread_create(&worker2, NULL, worker_thread2, NULL);
+  pthread_join(worker1, NULL);
+  pthread_join(worker2, NULL);
+  printf("\nAfter threads\n");
+  exit(0);
+}
+void *worker_thread1(void *arg) {
+  printf("\nHello ");
+  return NULL;
+}
+void *worker_thread2(void *arg) {
+  printf("World\n");
+  return NULL;
+}
+
+
+6. How to avoid Race conditions and deadlocks? 
+
+By using mutex, race conditions and deadlocks can be avoided, ie, by locking one of the process while other process using the resource.
+
+7. What is the difference between exec and fork ?
+
+In fork(), new process are created ,these process are called child process and both parent and child process execute simultaneously.
+
+In exec(), the process overlay the existing process ans return to the original process untill an error occurs to the newly created process
+
+8. What is the difference between process and threads. 
+
+Process is an execution state in the cpu whereas a thread can be a segment of the cpu. 
+
+9. Code
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+int shared_data;
+pthread_mutex_t data_lock;
+void *worker_thread1(void *arg);
+void *worker_thread2(void *arg);
+int main() {
+  pthread_t worker1;
+  pthread_t worker2;
+  pthread_mutex_init(&data_lock, NULL);
+  pthread_create(&worker1, NULL, worker_thread1, NULL);
+  pthread_create(&worker2, NULL, worker_thread2, NULL);
+  pthread_join(worker1, NULL);
+  pthread_join(worker2, NULL);
+  pthread_mutex_destroy(&data_lock);
+  exit(0);
+}
+void *worker_thread1(void *arg) {
+  pthread_mutex_lock(&data_lock);
+  for (int i = 0; i < 10; i++) {
+    shared_data++;
+    printf("\n From worker1: %d", shared_data);
+  }
+  pthread_mutex_unlock(&data_lock);
+  return NULL;
+}
+void *worker_thread2(void *arg) {
+  pthread_mutex_lock(&data_lock);
+  for (int i = 0; i < 10; i++) {
+    shared_data++;
+    printf("\n From worker2: %d", shared_data);
+  }
+  pthread_mutex_unlock(&data_lock);
+  return NULL;
+}
